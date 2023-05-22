@@ -14,29 +14,7 @@ pipeline {
                 }
             }
         }
-        stage ('Deploy Server') {
-            steps {
-                script {
-                    SERVER = 'pinglink-ui.keyssoft.xyz'
-                    VOLUME = '/app/pinglink-ui'
-                }
-                sshagent(credentials: ['pinglink.keyssoft.xyz']) {
-                    sh '''
-                        [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
-                        ssh-keyscan -t rsa,dsa pinglink.keyssoft.xyz >> ~/.ssh/known_hosts
-                        sshpass scp -o StrictHostKeyChecking=no -r root@pinglink.keyssoft.xyz:/app/pinglink-ui pinglink-ui/ || false
-                    '''
-                }
-                withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                    sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker stop pinglink-server || true"
-                    sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker rm pinglink-server || true"
-                    sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker pull keysoutsourcedocker/pinglink-server:latest"
-                    sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker run --name pinglink-server -dp 3000:3000 keysoutsourcedocker/pinglink-server:latest"
-                    sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker cp ./pinglink-ui pinglink-server:/app/public"
 
-                }
-            }
-        }
         stage('Build') {
             steps {
                 nodejs(nodeJSInstallationName: 'nodejs') {
