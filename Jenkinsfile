@@ -16,13 +16,13 @@ pipeline {
         // }
         stage('Build') {
             steps {
-                nodejs(nodeJSInstallationName: 'nodejs') {
+                // nodejs(nodeJSInstallationName: 'nodejs') {
                     withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                         sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} sudo rm -rf ping-ui"
                         sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} git clone git@github.com:JoshuaKeys/ping-ui.git"
                     }
 
-                }   
+                // }   
             }
         }
         // stage ('Push to DockerHub') {
