@@ -24,7 +24,7 @@ pipeline {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh-keyscan -t rsa,dsa pinglink.keyssoft.xyz >> ~/.ssh/known_hosts
-                        sshpass scp -o StrictHostKeyChecking=no -r root@pinglink.keyssoft.xyz:/app/pinglink-ui pinglink-ui/
+                        sshpass scp -o StrictHostKeyChecking=no -r root@pinglink.keyssoft.xyz:/app/pinglink-ui pinglink-ui/ || false
                     '''
                 }
                 withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
