@@ -20,6 +20,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                         sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@pinglink-ui.keyssoft.xyz rm -rf ping-ui"
                         sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@pinglink-ui.keyssoft.xyz git clone https://github.com/JoshuaKeys/ping-ui.git"
+                        sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@pinglink-ui.keyssoft.xyz cd ping-ui && npm install && npm start"
                 }
 
                 // }   
