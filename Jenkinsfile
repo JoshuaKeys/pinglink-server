@@ -34,8 +34,6 @@ pipeline {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh-keyscan -t rsa,dsa pinglink.keyssoft.xyz >> ~/.ssh/known_hosts
-                        echo "Hello World"
-                        cat ~/.ssh/known_hosts
                         sshpass ssh -o StrictHostKeyChecking=no root@pinglink.keyssoft.xyz ls -ltr
                     '''
                 }
