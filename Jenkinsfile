@@ -7,24 +7,24 @@ pipeline {
     }
 
     stages {
-        // stage('setup') {
-        //     steps {
-        //         nodejs(nodeJSInstallationName: 'nodejs') {
-        //             sh 'npm install'
-        //         }
-        //     }
-        // }
-        stage('Build') {
+        stage('setup') {
             steps {
-                // nodejs(nodeJSInstallationName: 'nodejs') {
-                    withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                        sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} rm -rf ping-ui"
-                        // sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} git clone git@github.com:JoshuaKeys/ping-ui.git"
-                    }
-
-                // }   
+                nodejs(nodeJSInstallationName: 'nodejs') {
+                    sh 'npm install'
+                }
             }
         }
+        // stage('Build') {
+        //     steps {
+        //         // nodejs(nodeJSInstallationName: 'nodejs') {
+        //             withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+        //                 sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} rm -rf ping-ui"
+        //                 // sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} git clone git@github.com:JoshuaKeys/ping-ui.git"
+        //             }
+
+        //         // }   
+        //     }
+        // }
         // stage ('Push to DockerHub') {
         //     steps {
         //         sh 'docker push keysoutsourcedocker/pinglink-server'
