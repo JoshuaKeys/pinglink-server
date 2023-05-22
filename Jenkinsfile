@@ -30,11 +30,6 @@ pipeline {
                 }   
             }
         }
-        // stage ('Push to DockerHub') {
-        //     steps {
-        //         sh 'docker push keysoutsourcedocker/pinglink-server'
-        //     }
-        // }
 
     }
 }
