@@ -31,7 +31,11 @@ pipeline {
                     VOLUME = '/app/pinglink-ui'
                 }
                 sshagent(credentials: ['pinglink.keyssoft.xyz']) {
-                    sh "sshpass ssh -o StrictHostKeyChecking=no root@pinglink.keyssoft.xyz ls -ltr"
+                    sh '''
+                        [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
+                        ssh-keyscan -t rsa,dsa pinglink.keyssoft.xyz >> ~/.ssh/known_hosts
+                        sshpass ssh -o StrictHostKeyChecking=no root@pinglink.keyssoft.xyz ls -ltr
+                    '''
                 }
                 withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                     sh "sshpass ssh -o StrictHostKeyChecking=no root@pinglink.keyssoft.xyz ls -ltr"
