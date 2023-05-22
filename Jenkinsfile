@@ -30,11 +30,15 @@ pipeline {
                     SERVER = 'pinglink-ui.keyssoft.xyz'
                     VOLUME = '/app/pinglink-ui'
                 }
+                sshagent(credentials: ['pinglink.keyssoft.xyz']) {
+                    sh "sshpass ssh -o StrictHostKeyChecking=no root@pinglink.keyssoft.xyz ls -ltr"
+                }
                 withCredentials([usernamePassword(credentialsId: 'pinglink-deployer', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                    sh "sshpass ssh -o StrictHostKeyChecking=no root@pinglink.keyssoft.xyz ls -ltr"
                     sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker stop pinglink-server || true"
                     sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker rm pinglink-server || true"
                     sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker pull keysoutsourcedocker/pinglink-server:latest"
-                    sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker run --name pinglink-server -dp 3000:3000 -v /app/pinglink-ui:/app/public keysoutsourcedocker/pinglink-server:latest"
+                    sh "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER} docker run --name pinglink-server -dp 3000:3000 keysoutsourcedocker/pinglink-server:latest"
                 }
             }
         }
